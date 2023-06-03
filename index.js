@@ -2,32 +2,32 @@ const express = require('express');
 const app = express();
 const multer = require('multer');
 
-//upload and save data
+//upload file
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: function (req, res, cb) {
     cb(null, "uploads/")
   },
+
   filename: function (req, file, cb) {
-      const fileName = Date.now() + '-' + file.originalname;
+    const fileName = Date.now() + "-" + file.originalname; 
     cb(null, fileName)
-  }
+  },
 })
 
-const upload = multer({ storage: storage })
+const upload = multer({storage: storage})
 
 
-//routing
+
+//routing work
 app.get("/", (req, res) => {
-    res.send('Hello Server :) <br> <a href="/register"> upload file </a>');
+  res.send("Hello server to upload a file to server");
 })
 
 app.get("/register", (req, res) => {
-    res.status(200).sendFile(__dirname + "/index.html");
+  res.sendFile(__dirname + "/index.html");
 })
 
-app.post("/register", upload.single("data"), (req, res) => {
-    res.status(200).sendFile(__dirname + "/index.html");
+app.post("/register", upload.array("data", 2), (req, res) => {
+  res.send("file uploaded successfully!!!");
 })
-
-
-app.listen(8085);
+app.listen(3200);
